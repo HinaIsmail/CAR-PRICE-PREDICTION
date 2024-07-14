@@ -1,0 +1,118 @@
+# CAR PRICE PREDICTION
+
+![image.png](attachment:f1393481-a2c5-432c-aa62-c428ca6dc98c.png)
+
+Car price prediction involves estimating a car's price based on features
+                       
+                       like make, model, year, and mileage using machine learning models. 
+                       
+ The process includes data collection, preprocessing (handling missing values, encoding categorical variables, and scaling), exploratory data analysis to understand patterns, selecting and training models like linear regression or random forests, evaluating their performance with metrics such as Mean Absolute Error (MAE), and finally deploying the best model for predicting prices on new data.
+# Columns Description:
+![Capture.PNG](attachment:cc645bf0-0362-4179-8ae5-df4c6a534648.PNG)
+# Importing Libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+# Loading the Dataset
+df = pd.read_csv('/kaggle/input/car-price-prediction/CarPrice_Assignment.csv')
+df.head()
+df.info()
+df.describe()
+df.isnull()
+df.isnull().sum()
+df.columns
+pd.DataFrame(df.dtypes, columns=['Datatype'])
+# Checking for unique values
+df.nunique()
+**Insights from fueltype**
+df.fueltype.unique()
+df.fueltype.value_counts()
+**Insights from doornumber**
+df.doornumber.unique()
+df.doornumber.value_counts()
+**Insights from carbody**
+df.carbody.unique()
+df.carbody.value_counts()
+**Insights from drivewheel**
+df.drivewheel.unique()
+df.drivewheel.value_counts()
+**Insights from enginelocation**
+df.enginelocation.unique()
+df.enginelocation.value_counts()
+df.columns
+df[df['enginelocation'] == 'rear'][['CarName']]
+**Insights from fuelsystem**
+df.fuelsystem.unique()
+df.fuelsystem.value_counts()
+df[(df['fuelsystem']=='mfi')|(df['fuelsystem']=='spfi') | (df['fuelsystem']=='4bbl')][['fuelsystem','CarName']]
+**Insights from CarName**
+df.CarName.unique()
+df.CarName.value_counts()
+df.columns
+df['company'] = df['CarName'].apply(lambda x: x.split(' ')[0])
+df.head()
+df.info()
+df.describe()
+df.isnull()
+df['company'].nunique()
+df.company.unique()
+pd.DataFrame(df['company'].value_counts() )
+df.company.unique()
+df.company.replace('maxda', 'mazda', inplace=True)
+df.company.replace('porcshce', 'porsche', inplace=True)
+df.company.replace('toyouta', 'toyota', inplace=True)
+df.company.replace('vokswagen', 'volkswagen', inplace=True)
+df.company.replace('vw', 'volkswagen', inplace=True)
+df.company.replace('Nissan', 'nissan', inplace=True)
+df.company.unique()
+plt.figure(figsize=(15, 6))
+
+# making bar plot of value count of cars by company
+df['company'].value_counts().plot(kind='bar')
+# adding title and x and y axis labels
+plt.title('Number of Cars by Company')
+plt.xlabel('Company')
+plt.ylabel('Number of Cars')
+plt.xticks(rotation=45, ha='right')
+plt.show()
+# Count Plots of Categorical Variables
+category = df[['fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation', 'enginetype', 'cylindernumber', 'fuelsystem']]
+
+# plotting the count plot for each categorical column
+
+# define the figure size
+plt.figure(figsize=(20, 50))
+
+# for loop to plot the count plot
+for i in range(len(category.columns)):
+    # create the subplot	
+    plt.subplot(15, 3, i+1)
+    # plot the count plot using seaborn
+    sns.countplot(x=category.columns[i], data=category)
+    # set the title
+    plt.title(f'Count plot of {category.columns[i]}')
+
+# adjust the layout
+plt.tight_layout()
+plt.show()
+# Hist Plots of Numeirc Variables
+numeric = df[['wheelbase', 'carlength', 'carwidth', 'carheight', 'curbweight', 'enginesize', 
+'boreratio', 'stroke', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg', 'price']]
+
+# plotting the histogram
+
+# define the figure size
+plt.figure(figsize=(25, 50))
+
+# for loop to plot the histogram
+for i in range(len(numeric.columns)):
+    plt.subplot(20 , 2 , i+1)
+
+    # plot the histogram
+    sns.histplot(data= numeric , x = numeric.columns[i])
+    plt.tight_layout()
+    plt.title(f'Histogram of {numeric.columns[i]}')
+plt.show()
